@@ -1,0 +1,76 @@
+data feeds
+Vox -  All {'language': 'en', 'title': 'Vox -  All', 'title_detail': {'type': 'text/plain', 'language': 'en', 'base': 'https://www.vox.com/rss/index.xml', 'value': 'Vox -  All'}, 'icon': 'https://cdn.vox-cdn.com/community_logos/52517/voxv.png', 'updated': '2018-08-13T20:30:01-04:00', 'updated_parsed': time.struct_time(tm_year=2018, tm_mon=8, tm_mday=14, tm_hour=0, tm_min=30, tm_sec=1, tm_wday=1, tm_yday=226, tm_isdst=0), 'id': 'https://www.vox.com/rss/index.xml', 'guidislink': True, 'link': 'https://www.vox.com/', 'links': [{'type': 'text/html', 'href': 'https://www.vox.com/', 'rel': 'alternate'}]}
+compare Vox -  All  to  NYT > Home Page
+rss
+shared keys ['bozo', 'encoding', 'entries', 'etag', 'feed', 'headers', 'href', 'namespaces', 'status', 'version']
+unique to  Vox -  All []
+unique to  NYT > Home Page ['updated', 'updated_parsed']
+
+feed
+shared keys ['language', 'link', 'links', 'title', 'title_detail', 'updated', 'updated_parsed']
+unique to  Vox -  All ['guidislink', 'icon', 'id']
+unique to  NYT > Home Page ['image', 'rights', 'rights_detail', 'subtitle', 'subtitle_detail']
+
+entries
+shared keys ['author', 'author_detail', 'authors', 'content', 'guidislink', 'id', 'link', 'links', 'published', 'published_parsed', 'summary', 'title', 'title_detail']
+unique to  Vox -  All ['updated', 'updated_parsed']
+unique to  NYT > Home Page ['credit', 'media_content', 'media_credit', 'summary_detail', 'tags']
+
+Vox -  All  optional keys  []
+NYT > Home Page  optional keys  ['author_detail', 'content', 'credit', 'media_content', 'media_credit', 'tags']
+NYT > Home Page {'title': 'NYT > Home Page', 'title_detail': {'type': 'text/plain', 'language': None, 'base': 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml', 'value': 'NYT > Home Page'}, 'links': [{'rel': 'alternate', 'type': 'text/html', 'href': 'http://www.nytimes.com/pages/index.html?partner=rss&emc=rss'}, {'rel': 'self', 'type': 'application/rss+xml', 'href': 'http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml'}], 'link': 'http://www.nytimes.com/pages/index.html?partner=rss&emc=rss', 'subtitle': '', 'subtitle_detail': {'type': 'text/html', 'language': None, 'base': 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml', 'value': ''}, 'language': 'en-us', 'rights': 'Copyright 2018  The New York Times Company', 'rights_detail': {'type': 'text/plain', 'language': None, 'base': 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml', 'value': 'Copyright 2018  The New York Times Company'}, 'updated': 'Tue, 14 Aug 2018 02:00:31 GMT', 'updated_parsed': time.struct_time(tm_year=2018, tm_mon=8, tm_mday=14, tm_hour=2, tm_min=0, tm_sec=31, tm_wday=1, tm_yday=226, tm_isdst=0), 'image': {'title': 'NYT > Home Page', 'title_detail': {'type': 'text/plain', 'language': None, 'base': 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml', 'value': 'NYT > Home Page'}, 'href': 'https://static01.nyt.com/images/misc/NYT_logo_rss_250x40.png', 'links': [{'rel': 'alternate', 'type': 'text/html', 'href': 'http://www.nytimes.com/pages/index.html?partner=rss&emc=rss'}], 'link': 'http://www.nytimes.com/pages/index.html?partner=rss&emc=rss'}}
+compare NYT > Home Page  to  Vox -  All
+rss
+shared keys ['bozo', 'encoding', 'entries', 'etag', 'feed', 'headers', 'href', 'namespaces', 'status', 'version']
+unique to  NYT > Home Page ['updated', 'updated_parsed']
+unique to  Vox -  All []
+
+feed
+shared keys ['language', 'link', 'links', 'title', 'title_detail', 'updated', 'updated_parsed']
+unique to  NYT > Home Page ['image', 'rights', 'rights_detail', 'subtitle', 'subtitle_detail']
+unique to  Vox -  All ['guidislink', 'icon', 'id']
+
+entries
+shared keys ['author', 'author_detail', 'authors', 'content', 'guidislink', 'id', 'link', 'links', 'published', 'published_parsed', 'summary', 'title', 'title_detail']
+unique to  NYT > Home Page ['credit', 'media_content', 'media_credit', 'summary_detail', 'tags']
+unique to  Vox -  All ['updated', 'updated_parsed']
+
+NYT > Home Page  optional keys  ['author_detail', 'content', 'credit', 'media_content', 'media_credit', 'tags']
+Vox -  All  optional keys  []
+
+nytimes: author_detail and content are optional
+
+does nyt update articles?
+
+published_parsed seems to be in GMT format
+NYTimes doesn't seem to update all that often
+22:59 GMT update at 2:19AM GMT, entries may not be sorted, though
+
+how many entries should be fetched?
+Start with all entries more recent than 24 hours ago.
+
+db
+batch
+  id
+  feed foreign key
+  fetched_at
+
+feed
+  id
+  title
+  updated
+
+entry
+  id
+  feed foreign key
+  title
+  author
+  content optional html fragment string
+  link unique? what if updated?
+  published string, should really convert published_parsed (time.struct_time) back to datetime
+    index
+  summary
+
+psql postgres://localhost:5432/rss
+
+https://github.com/fschulze/sqlalchemy_schemadisplay
